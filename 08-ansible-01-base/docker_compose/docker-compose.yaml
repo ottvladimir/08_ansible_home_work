@@ -1,0 +1,25 @@
+version: "3"
+volumes:
+   ansible_data:
+     external: true
+services:
+    rockylinux:
+        container_name: rocky
+        build: ./rocky/
+        ports:
+            - "1222:222"
+    centos:
+        container_name: centos7
+        build: ./centos/
+        ports:
+            - "2222:222"
+    ubuntu:
+        container_name: ubuntu
+        build: ./ubuntu/
+        ports:
+            - "3222:222"
+    ansible:
+        container_name: ansible
+        build: ./ansible/
+        volumes: 
+            - ansible_data:/data:rw

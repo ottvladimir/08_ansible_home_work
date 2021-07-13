@@ -1,0 +1,30 @@
+version: "3"
+volumes:
+   ansible_data:
+     external: false
+services:
+    elasticsearch:
+        stdin_open: false
+        container_name: elasticsearch
+        build: ./rocky/
+        ports:
+            - "1222:222"
+    kibana:
+        stdin_open: false
+        container_name: kibana
+        build: ./centos/
+        ports:
+            - "2222:222"
+    logstash:
+        stdin_open: false
+        container_name: logstash
+        build: ./ubuntu/
+        ports:
+            - "3222:222"
+    ansible:
+        container_name: ansible
+        build: ./ansible/
+        volumes: 
+            - ansible_data:/data:rw
+        stdin_open: true
+        tty: true

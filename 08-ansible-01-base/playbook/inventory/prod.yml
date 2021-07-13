@@ -1,0 +1,16 @@
+  el:
+    hosts:
+      centos7:
+        ansible_connection: ssh
+  deb:
+    hosts:
+      ubuntu:
+        ansible_connection: ssh
+  local:
+    hosts:
+      localhost:
+        ansible_connection: local
+  rocky:
+    hosts:
+      rocky:
+        ansible_connection: ssh

@@ -1,0 +1,13 @@
+version: "3"
+volumes:
+   ansible_data:
+     external: false
+services:
+    elasticsearch:
+        stdin_open: false
+        container_name: elasticsearch
+        build: ./rocky/
+    kibana:
+        stdin_open: false
+        container_name: kibana
+        build: ./centos/

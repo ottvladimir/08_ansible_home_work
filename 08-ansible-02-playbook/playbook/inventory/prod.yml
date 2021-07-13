@@ -1,0 +1,16 @@
+---
+  elasticsearch:
+    hosts:
+      elasticsearch:
+        ansible_connection: ssh
+        ansible_user: root
+  kibana:
+    hosts:
+      kibana:
+        ansible_connection: ssh
+        ansible_user: root
+  logstash:
+    hosts:
+      logstash:
+        ansible_connection: ssh
+        ansible_user: root
