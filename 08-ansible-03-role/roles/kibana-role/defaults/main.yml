@@ -1,0 +1,3 @@
+---
+# defaults file for kibana-role
+ kibana_version: "7.13.3"

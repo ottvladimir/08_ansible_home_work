@@ -1,0 +1,11 @@
+---
+  elastic:
+    hosts:
+      elastic:
+        ansible_connection: ssh
+        ansible_user: root
+  kibana:
+    hosts:
+      kibana:
+        ansible_connection: ssh
+        ansible_user: root

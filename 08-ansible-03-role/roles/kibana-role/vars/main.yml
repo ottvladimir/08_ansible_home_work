@@ -1,0 +1,3 @@
+---
+# vars file for kibana-role
+kibana_home: "/opt/kibana/{{ kibana_version }}"

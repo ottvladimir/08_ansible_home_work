@@ -1,0 +1,14 @@
+---
+- name: Install Java
+  hosts: all
+  roles:
+    - java
+- name: Install Elasticsearch
+  hosts: elastic
+  roles:
+    - elastic-role
+- name: Install Kibana
+  hosts: elastic
+  roles:
+    - kibana-role
+      
