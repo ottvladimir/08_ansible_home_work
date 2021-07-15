@@ -31,3 +31,8 @@
       src: templates/elk.sh.j2
       dest: /etc/profile.d/elk.sh
     tags: elastic
+  - name: Start Elastic
+    become: yes
+    command: >
+     {{ elastic_home }}/bin/elasticsearch
+    tags: elastic
