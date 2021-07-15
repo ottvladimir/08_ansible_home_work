@@ -31,3 +31,8 @@
     src: templates/kib.sh.j2
     dest: /etc/profile.d/kib.sh
   tags: kibana
+- name: Start Kibana
+  become: yes
+  command: >
+    {{ kibana_home }}/bin/kibana
+  tags: kibana
