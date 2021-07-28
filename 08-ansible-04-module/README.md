@@ -125,8 +125,21 @@ def run_module():
     # if the user is working with this module in only check mode we do not
     # want to make any changes to the environment, just return the current
     # state with no modifications
-    if module.check_mode:
+    if module.params['path'][:-1] == '/'
+        generated_path = module.params['path'] + module.params['name']
+    else:
+        generated_path = module.param['path'] + '/' + module.params['name']
+    need_create = os.access(generated_path, os.F_OK) and not module.params['force']
+    if module.check_mode or need_create:
         module.exit_json(**result)
+    os.makedirs(module.params['parh'],exit_ok=True)
+    with open(generate_path, 'wb') as new:
+        new.write(to_bytes(module.params['content']))
+    result['original_message'] = 'Succeful created'
+    result['message'] = 'goodbye'
+    result['changed'] = True
+    # if module.check_mode:
+    #     module.exit_json(**result)
 
     # manipulate or modify the state as needed (this is going to be the
     # part where your module will do what it needs to do)
