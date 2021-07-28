@@ -183,20 +183,37 @@ if __name__ == '__main__':
  ```
 
 3. Заполните файл в соответствии с требованиями ansible так, чтобы он выполнял основную задачу: module должен создавать текстовый файл на удалённом хосте по пути, определённом в параметре `path`, с содержимым, определённым в параметре `content`.
-4. Проверьте module на исполняемость локально.
+4. Проверьте module на исполняемость локально `python -m ansible.modules.my_own_module payload.json.
 5. Напишите single task playbook и используйте module в нём.
-6. Проверьте через playbook на идемпотентность.
-7. Выйдите из виртуального окружения.
-8. Инициализируйте новую collection: `ansible-galaxy collection init my_own_namespace.my_own_collection`
-9. В данную collection перенесите свой module в соответствующую директорию.
-10. Single task playbook преобразуйте в single task role и перенесите в collection. У role должны быть default всех параметров module
-11. Создайте playbook для использования этой role.
-12. Заполните всю документацию по collection, выложите в свой репозиторий, поставьте тег `1.0.0` на этот коммит.
-13. Создайте .tar.gz этой collection: `ansible-galaxy collection build` в корневой директории collection.
-14. Создайте ещё одну директорию любого наименования, перенесите туда single task playbook и архив c collection.
-15. Установите collection из локального архива: `ansible-galaxy collection install <archivename>.tar.gz`
-16. Запустите playbook, убедитесь, что он работает.
-17. В ответ необходимо прислать ссылку на репозиторий с collection
+```yml
+---
+- name: test the new module
+  gather_facts: false
+  hosts: localhost
+  tasks: 
+  - name: run the module
+    my_oun_module:
+      name: NewName
+      path: /tmp/new/
+      content: New file text for test
+      force: false
+    register: testout
+  - name: dump test output
+    debug:
+      msg: '({ testout})'
+```
+7. Проверьте через playbook на идемпотентность.
+8. Выйдите из виртуального окружения.
+9. Инициализируйте новую collection: `ansible-galaxy collection init my_own_namespace.my_own_collection`
+10. В данную collection перенесите свой module в соответствующую директорию.
+11. Single task playbook преобразуйте в single task role и перенесите в collection. У role должны быть default всех параметров module
+12. Создайте playbook для использования этой role.
+13. Заполните всю документацию по collection, выложите в свой репозиторий, поставьте тег `1.0.0` на этот коммит.
+14. Создайте .tar.gz этой collection: `ansible-galaxy collection build` в корневой директории collection.
+15. Создайте ещё одну директорию любого наименования, перенесите туда single task playbook и архив c collection.
+16. Установите collection из локального архива: `ansible-galaxy collection install <archivename>.tar.gz`
+17. Запустите playbook, убедитесь, что он работает.
+18. В ответ необходимо прислать ссылку на репозиторий с collection
 
 ## Необязательная часть
 
