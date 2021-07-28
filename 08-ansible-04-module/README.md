@@ -2,7 +2,7 @@
 
 ## Подготовка к выполнению
 1. https://github.com/ottvladimir/my_own_collection
-2. Скачайте репозиторий ansible: `git clone https://github.com/ansible/ansible.git` по любому удобному вам пути
+2. Скачиваю репозиторий ansible: `git clone https://github.com/ansible/ansible.git` по л
 3. Зайдите в директорию ansible: `cd ansible`
 4. Создайте виртуальное окружение: `python3 -m venv venv`
 5. Активируйте виртуальное окружение: `. venv/bin/activate`. Дальнейшие действия производятся только в виртуальном окружении
@@ -13,9 +13,7 @@
 
 ## Основная часть
 
-Наша цель - написать собственный module, который мы можем использовать в своей role, через playbook. Всё это должно быть собрано в виде collection и отправлено в наш репозиторий.
-
-1. В виртуальном окружении создать новый `my_own_module.py` файл
+1. В виртуальном окружении создаю новый `my_own_module.py` файл
 ```python
 #!/usr/bin/python
 
@@ -169,7 +167,7 @@ def main():
 if __name__ == '__main__':
     main()
 ```
-Или возьмите данное наполнение из [статьи](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#creating-a-module).
+2. Проверьте module на исполняемость локально `python -m ansible.modules.my_own_module payload.json`.
 
 ```json
 {
@@ -182,9 +180,7 @@ if __name__ == '__main__':
  }
  ```
 
-3. Заполните файл в соответствии с требованиями ansible так, чтобы он выполнял основную задачу: module должен создавать текстовый файл на удалённом хосте по пути, определённом в параметре `path`, с содержимым, определённым в параметре `content`.
-4. Проверьте module на исполняемость локально `python -m ansible.modules.my_own_module payload.json.
-5. Напишите single task playbook и используйте module в нём.
+3. Напишите single task playbook и используйте module в нём.
 ```yml
 ---
 - name: test the new module
@@ -202,10 +198,10 @@ if __name__ == '__main__':
     debug:
       msg: '({ testout})'
 ```
-7. Проверьте через playbook на идемпотентность.
-8. Выйдите из виртуального окружения.
+7. Проверьте через playbook на идемпотентность `ansible-playbook`.
+8. Выйдите из виртуального окружения `deactivate`.
 9. Инициализируйте новую collection: `ansible-galaxy collection init my_own_namespace.my_own_collection`
-10. В данную collection перенесите свой module в соответствующую директорию.
+10. В данную collection перенесите свой module в соответствующую директорию. ./plugins/modules/...
 11. Single task playbook преобразуйте в single task role и перенесите в collection. У role должны быть default всех параметров module
 12. Создайте playbook для использования этой role.
 13. Заполните всю документацию по collection, выложите в свой репозиторий, поставьте тег `1.0.0` на этот коммит.
