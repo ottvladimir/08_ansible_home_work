@@ -1,7 +1,7 @@
 # Домашнее задание к занятию "08.04 Создание собственных modules"
 
 ## Подготовка к выполнению
-1. Создайте пустой публичных репозиторий в любом своём проекте: `my_own_collection`
+1. https://github.com/ottvladimir/my_own_collection
 2. Скачайте репозиторий ansible: `git clone https://github.com/ansible/ansible.git` по любому удобному вам пути
 3. Зайдите в директорию ansible: `cd ansible`
 4. Создайте виртуальное окружение: `python3 -m venv venv`
@@ -16,7 +16,6 @@
 Наша цель - написать собственный module, который мы можем использовать в своей role, через playbook. Всё это должно быть собрано в виде collection и отправлено в наш репозиторий.
 
 1. В виртуальном окружении создать новый `my_own_module.py` файл
-2. Наполнить его содержимым:
 ```python
 #!/usr/bin/python
 
@@ -24,6 +23,8 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
+import os
+from ansible.mpdule_utils._text import to_bytes
 
 DOCUMENTATION = r'''
 ---
@@ -95,8 +96,10 @@ from ansible.module_utils.basic import AnsibleModule
 def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
-        name=dict(type='str', required=True),
-        new=dict(type='bool', required=False, default=False)
+        path=dict(type='str',required=True)
+        name=dict(type='str', required=False, default='example'),
+        content=dict(type='str',required=True),
+        force=dict(type='bool', required=False, default=False)
     )
 
     # seed the result dict in the object
@@ -154,6 +157,17 @@ if __name__ == '__main__':
     main()
 ```
 Или возьмите данное наполнение из [статьи](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#creating-a-module).
+
+```json
+{
+  "ANSIBLE_MODULE_ARGS": {
+      "name": "NewName",
+      "path": "/tmp/new/",
+      "content": "New file text for test",
+      "force": false
+      }
+ }
+ ```
 
 3. Заполните файл в соответствии с требованиями ansible так, чтобы он выполнял основную задачу: module должен создавать текстовый файл на удалённом хосте по пути, определённом в параметре `path`, с содержимым, определённым в параметре `content`.
 4. Проверьте module на исполняемость локально.
