@@ -94,7 +94,7 @@ from ansible.module_utils.basic import AnsibleModule
 def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
-        path=dict(type='str',required=True)
+        path=dict(type='str',required=True),
         name=dict(type='str', required=False, default='example'),
         content=dict(type='str',required=True),
         force=dict(type='bool', required=False, default=False)
@@ -123,15 +123,15 @@ def run_module():
     # if the user is working with this module in only check mode we do not
     # want to make any changes to the environment, just return the current
     # state with no modifications
-    if module.params['path'][:-1] == '/'
+    if module.params['path'][:-1] == '/':
         generated_path = module.params['path'] + module.params['name']
     else:
-        generated_path = module.param['path'] + '/' + module.params['name']
+        generated_path = module.params['path'] + '/' + module.params['name']
     need_create = os.access(generated_path, os.F_OK) and not module.params['force']
     if module.check_mode or need_create:
         module.exit_json(**result)
-    os.makedirs(module.params['parh'],exit_ok=True)
-    with open(generate_path, 'wb') as new:
+    os.makedirs(module.params['path'],exist_ok=True)
+    with open(generated_path, 'wb') as new:
         new.write(to_bytes(module.params['content']))
     result['original_message'] = 'Succeful created'
     result['message'] = 'goodbye'
@@ -146,7 +146,7 @@ def run_module():
 
     # use whatever logic you need to determine whether or not this module
     # made any modifications to your target
-    if module.params['new']:
+    if module.params['name']:
         result['changed'] = True
 
     # during the execution of the module, if there is an exception or a
@@ -186,9 +186,9 @@ if __name__ == '__main__':
 - name: test the new module
   gather_facts: false
   hosts: localhost
-  tasks: 
+  tasks:
   - name: run the module
-    my_oun_module:
+    my_own_module:
       name: NewName
       path: /tmp/new/
       content: New file text for test
@@ -196,14 +196,44 @@ if __name__ == '__main__':
     register: testout
   - name: dump test output
     debug:
-      msg: '({ testout})'
+        msg: '({ testout})'
 ```
-7. Проверьте через playbook на идемпотентность `ansible-playbook`.
-8. Выйдите из виртуального окружения `deactivate`.
-9. Инициализируйте новую collection: `ansible-galaxy collection init my_own_namespace.my_own_collection`
-10. В данную collection перенесите свой module в соответствующую директорию. ./plugins/modules/...
-11. Single task playbook преобразуйте в single task role и перенесите в collection. У role должны быть default всех параметров module
-12. Создайте playbook для использования этой role.
+
+7. 
+```bash
+[WARNING]: You are running the development version of Ansible. You should only run Ansible from "devel" if you are modifying the Ansible engine, or trying out features
+under development. This is a rapidly changing source of code and can become unstable at any point.
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+[WARNING]: ansible.utils.display.initialize_locale has not been called, this may result in incorrectly calculated text widths that can cause Display to print incorrect line
+lengths
+
+PLAY [test the new module] **************************************************************************************************************************************************
+
+TASK [run the module] *******************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [dump test output] *****************************************************************************************************************************************************
+ok: [localhost] => {
+    "msg": "({ testout})"
+}
+
+PLAY RECAP ******************************************************************************************************************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+(venv) [node1] (local) root@192.168.0.13 ~/ansible
+```
+8. `deactivate`.
+9. `ansible-galaxy collection init my_own_namespace.my_own_collection`
+10. `mv ansible/modules/my_own_module.py my_own_collection/my_own_module/plugins/modules/`
+```yml
+---
+- name: rum my_oun_riole
+  gather_facts: false
+  hosts: localhost
+  roles: 
+    - my_own_role
+```
 13. Заполните всю документацию по collection, выложите в свой репозиторий, поставьте тег `1.0.0` на этот коммит.
 14. Создайте .tar.gz этой collection: `ansible-galaxy collection build` в корневой директории collection.
 15. Создайте ещё одну директорию любого наименования, перенесите туда single task playbook и архив c collection.
