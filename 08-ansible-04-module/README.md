@@ -234,25 +234,44 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
   roles: 
     - my_own_role
 ```
-13. Заполните всю документацию по collection, выложите в свой репозиторий, поставьте тег `1.0.0` на этот коммит.
-14. Создайте .tar.gz этой collection: `ansible-galaxy collection build` в корневой директории collection.
-15. Создайте ещё одну директорию любого наименования, перенесите туда single task playbook и архив c collection.
-16. Установите collection из локального архива: `ansible-galaxy collection install <archivename>.tar.gz`
-17. Запустите playbook, убедитесь, что он работает.
-18. В ответ необходимо прислать ссылку на репозиторий с collection
+13. https://github.com/ottvladimir/my_own_collection.
+```bash
+$ ansible-galaxy collection install my_own_namespace-my_own_collection-1.0.0.tar.gz 
+Process install dependency map
+Starting collection install process
+Installing 'my_own_namespace.my_own_collection:1.0.0' to '/root/.ansible/collections/ansible_collections/my_own_namespace/my_own_collection'
+$ ansible-playbook playbook.yaml 
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
 
-## Необязательная часть
+PLAY [test the new module] *****************************************************************************************************************************************************************************************
 
-1. Используйте свой полёт фантазии: Создайте свой собственный module для тех roles, что мы делали в рамках предыдущих лекций.
-2. Соберите из roles и module отдельную collection.
-3. Создайте новый репозиторий и выложите новую collection туда.
+TASK [run the module] **********************************************************************************************************************************************************************************************
+changed: [localhost]
 
-Если идей нет, но очень хочется попробовать что-то реализовать: реализовать module восстановления из backup elasticsearch.
+TASK [dump test output] ********************************************************************************************************************************************************************************************
+ok: [localhost] => {
+    "msg": "({ testout})"
+}
 
+PLAY RECAP *********************************************************************************************************************************************************************************************************
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+playbook
+```yaml
 ---
-
-### Как оформить ДЗ?
-
-Выполненное домашнее задание пришлите ссылкой на .md-файл в вашем репозитории.
-
----
+- name: test the new module
+  gather_facts: false
+  hosts: localhost
+  tasks:
+  - name: run the module
+    my_own_namespace.my_own_collection.my_own_module:
+      name: NewName
+      path: /tmp/new/
+      content: New file text for test
+      force: false
+    register: testout
+  - name: dump test output
+    debug:
+        msg: '({ testout})'
+```
