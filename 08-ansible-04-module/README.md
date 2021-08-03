@@ -177,7 +177,7 @@ if __name__ == '__main__':
   hosts: localhost
   tasks:
   - name: run the module
-    my_own_module:
+    ansible.modules.my_own_module:
       name: NewName
       path: /tmp/new/
       content: New file text for test
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     register: testout
   - name: dump test output
     debug:
-        msg: '({ testout})'
+        msg: '{{ testout }} '
 ```
 
 7. 
